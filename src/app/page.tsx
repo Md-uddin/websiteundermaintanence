@@ -27,7 +27,7 @@ function CompanyInfo({ name, email, phone }: CompanyInfoProps) {
 export default function Home() {
   return (
     <div
-      className="flex flex-col items-end px-14 pt-12 pb-20 w-full max-md:px-5 max-md:max-w-full bg-center bg-cover bg-no-repeat h-screen"
+      className="flex flex-col items-end px-14 pt-12 pb-20 w-full max-md:px-5 max-md:max-w-full bg-center bg-cover bg-no-repeat "
       style={{
         background: "url('bg.png')",
       }}
@@ -43,6 +43,15 @@ export default function Home() {
       <p className="mt-9 mr-24 mb-80 font-light text-right max-md:mr-2.5 max-md:mb-10 ">
         Stay Tuned!
       </p>
+      <iframe
+        width="100%"
+        height="750px"
+        src="https://easeenterprises.zohobookings.in/portal-embed#/219560000000029016"
+        // frameborder="0"
+        // allowfullscreen=""
+      >
+        {" "}
+      </iframe>
     </div>
   );
 }
