@@ -37,11 +37,15 @@ export default async function middleware(req: NextRequest) {
 		searchParams.length > 0 ? `?${searchParams}` : ""
 	}`;
 
+	// Check if the hostname includes a subdomain
+	const isSubdomain = hostname !== process.env.NEXT_PUBLIC_ROOT_DOMAIN;
 
-
-
-
-
-	// rewrite everything else to `/[domain]/[slug] dynamic route
-	return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
+	if (isSubdomain) {
+		// rewrite to /[domain]/[slug] dynamic route
+		return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
+	} else {
+		// Handle root domain requests differently
+		// You can rewrite to a specific page or just let it pass through without rewriting
+		return NextResponse.next();
+	}
 }
