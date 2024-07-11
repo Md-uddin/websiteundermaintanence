@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
-	matcher: [
-		/*
-		 * Match all paths except for:
-		 * 1. /api routes
-		 * 2. /_next (Next.js internals)
-		 * 3. /_static (inside /public)
-		 * 4. all root files inside /public (e.g. /favicon.ico)
-		 */
-		"/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
-	],
+	matcher: ["/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)"],
 };
 
 export default async function middleware(req: NextRequest) {
@@ -21,7 +12,7 @@ export default async function middleware(req: NextRequest) {
 		.get("host")!
 		.replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
-	// special case for Vercel preview deployment URLs
+	// Special case for Vercel preview deployment URLs
 	if (
 		hostname.includes("---") &&
 		hostname.endsWith(`.${process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_SUFFIX}`)
@@ -36,12 +27,23 @@ export default async function middleware(req: NextRequest) {
 	const path = `${url.pathname}${
 		searchParams.length > 0 ? `?${searchParams}` : ""
 	}`;
+	console.log(path);
+
+	// Check if the path includes "/api/"
+	const isApiRoute = path.includes("/api/");
+
+	console.log({ isApiRoute }, "-------------------");
+
+	if (isApiRoute) {
+		// If it's an API route, just continue without rewriting
+		return NextResponse.next();
+	}
 
 	// Check if the hostname includes a subdomain
 	const isSubdomain = hostname !== process.env.NEXT_PUBLIC_ROOT_DOMAIN;
 
 	if (isSubdomain) {
-		// rewrite to /[domain]/[slug] dynamic route
+		// Rewrite to /[domain]/[slug] dynamic route
 		return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
 	} else {
 		// Handle root domain requests differently
