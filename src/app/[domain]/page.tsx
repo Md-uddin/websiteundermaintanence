@@ -1,3 +1,4 @@
+import { createClient } from "@/utils/supabase/server";
 import React from "react";
 
 export async function generateStaticParams() {
@@ -18,8 +19,19 @@ export async function generateStaticParams() {
 
 	return allPaths;
 }
-export default function DomainPage({ params }: { params: { domain: string } }) {
-	console.log({ params });
+export default async function DomainPage({
+	params,
+}: {
+	params: { domain: string };
+}) {
 	const decodedDomain = decodeURIComponent(params?.domain);
-	return <div>You are at domain:{decodedDomain} </div>;
+	const supabase = createClient();
+
+	const user = (await supabase.auth.getUser()?.then((res) => res))?.data?.user;
+
+	return (
+		<div>
+			You are at domain:{decodedDomain} & {user?.email || "no user found"}{" "}
+		</div>
+	);
 }

@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { updateSession } from "./utils/supabase/middleware";
 
 export const config = {
-	matcher: ["/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)"],
+	matcher: ["/((?!api/|_next/|auth/|_static/|login|_vercel|[\\w-]+\\.\\w+).*)"],
 };
 
 export default async function middleware(req: NextRequest) {
 	const url = req.nextUrl;
+	const { supabase, supabaseResponse } = await updateSession(req);
 
+	const user = await supabase.auth.getUser();
+	console.log({ user }, supabaseResponse.cookies.getAll(),'---------------------cookies-------------------');
 	// Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
 	let hostname = req.headers
 		.get("host")!
