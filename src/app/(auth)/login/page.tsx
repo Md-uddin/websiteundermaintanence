@@ -7,7 +7,6 @@ import { createClient } from "@/utils/supabase/client";
 export default function Login() {
 	const supabase = createClient();
 	const [error, setError] = useState<string | null>(null);
-	console.log(location.origin);
 	// Handler for the google-sign-in process
 	const handleGoogleSignIn = async () => {
 		const { data, error } = await supabase.auth.signInWithOAuth({
@@ -26,7 +25,6 @@ export default function Login() {
 			setError(error.message);
 		} else setError(null);
 	};
-	console.log(location.origin);
 
 	return (
 		<div className="w-full h-full min-h-screen bg-gray-100">
@@ -76,12 +74,12 @@ export default function Login() {
 					</footer>
 				</div>
 				<div className="w-1/2 hidden lg:block h-full relative min-h-screen">
-					<Image
+					{/* <Image
 						src="/login/bg.jpg"
 						alt="Login Background"
 						layout="fill"
 						className="w-full h-full object-cover"
-					/>
+					/> */}
 				</div>
 			</div>
 		</div>
