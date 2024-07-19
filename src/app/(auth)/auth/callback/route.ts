@@ -12,6 +12,7 @@ export async function GET(request: Request) {
 		const supabase = createClient();
 		const { error } = await supabase.auth.exchangeCodeForSession(code);
 		if (!error) {
+			console.log("redirecting to home page");
 			return NextResponse.redirect(`https://crea8iveclick.com${next}`);
 		}
 	}
